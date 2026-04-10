@@ -2,13 +2,13 @@
 
 Deploy a [Twingate](https://www.twingate.com/) Connector on Ubiquiti gateway devices using a lightweight systemd-nspawn container.
 
-## :rocket: Overview
+## Overview
 
 Ubiquiti gateways (UDM Pro, UDM SE, UXG-Pro, UXG-Max, etc.) run a customized Linux environment that doesn't include a native container runtime. This project uses **systemd-nspawn** to bootstrap a minimal Debian container directly on the gateway, install the Twingate Connector inside it, and configure it to start automatically on boot.
 
 The container filesystem is stored under `/data/custom/machines/`, which persists across UniFi OS firmware upgrades.
 
-## :sparkles: Features
+## Features
 
 - **Automated setup** -- single script handles everything from container creation to Connector installation
 - **Persistent across reboots** -- container data lives on the gateway's persistent `/data` partition
@@ -17,7 +17,7 @@ The container filesystem is stored under `/data/custom/machines/`, which persist
 - **Kernel compatibility** -- includes a fix for gateways without user namespace support
 - **Flexible credentials** -- pass tokens via environment variables or enter them interactively
 
-## :clipboard: Prerequisites
+## Prerequisites
 
 - A **Ubiquiti gateway** (UDM Pro, UDM SE, UXG-Pro, UXG-Max, or similar) running UniFi OS 3.x or later
 - **SSH access** to the gateway as root
@@ -34,7 +34,7 @@ The container filesystem is stored under `/data/custom/machines/`, which persist
    - **Access token**
    - **Refresh token**
 
-## :rocket: Quick Start
+## Quick Start
 
 ### Option 1: One-liner
 
@@ -61,7 +61,7 @@ export TWINGATE_REFRESH_TOKEN="your-refresh-token"
 sudo -E bash setup.sh
 ```
 
-## :gear: What the Script Does
+## What the Script Does
 
 1. Checks for root privileges
 2. Prompts for Twingate credentials (or reads them from environment variables)
@@ -75,7 +75,7 @@ sudo -E bash setup.sh
 10. Applies a user namespace compatibility fix for kernels that don't support it
 11. Verifies the Connector status and prints a summary
 
-## :wrench: Container Management
+## Container Management
 
 | Command | Description |
 |---------|-------------|
@@ -86,7 +86,7 @@ sudo -E bash setup.sh
 | `machinectl start twingate-connector` | Start the container |
 | `machinectl disable twingate-connector` | Disable auto-start on boot |
 
-## :file_folder: Key Paths
+## Key Paths
 
 | Path | Description |
 |------|-------------|
@@ -94,7 +94,7 @@ sudo -E bash setup.sh
 | `/var/lib/machines/twingate-connector` | Symlink to above (required by machinectl) |
 | `/etc/systemd/nspawn/twingate-connector.nspawn` | Container configuration |
 
-## :wastebasket: Uninstall
+## Uninstall
 
 To completely remove the Connector and container:
 
@@ -106,7 +106,7 @@ sudo rm -f /var/lib/machines/twingate-connector
 sudo rm -f /etc/systemd/nspawn/twingate-connector.nspawn
 ```
 
-## :lock: Security Considerations
+## Security Considerations
 
 - The container runs with **all capabilities** and **host networking**. This is required for the Connector to function as a network gateway.
 - The container root password is set to `twingate`. The container is not network-accessible (no SSH server inside), so risk is minimal. Change it if desired via `machinectl shell`.
@@ -114,7 +114,7 @@ sudo rm -f /etc/systemd/nspawn/twingate-connector.nspawn
 - **User namespaces are disabled** (`PrivateUsers=off`) because most Ubiquiti gateway kernels lack user namespace support.
 - The script uses `curl | bash` to run the official Twingate installer inside the container. This is the same installation method [documented by Twingate](https://www.twingate.com/docs/connectors).
 
-## :mag: Troubleshooting
+## Troubleshooting
 
 ### Container fails to start
 
@@ -143,7 +143,7 @@ The container data in `/data/custom/machines/` persists across firmware upgrades
 
 This is normal on gateway hardware. Expect approximately 10 minutes depending on your internet connection and device.
 
-## :file_folder: Repository Structure
+## Repository Structure
 
 ```
 ubiquiti-gateway-connector/
@@ -153,12 +153,12 @@ ubiquiti-gateway-connector/
 └── setup.sh
 ```
 
-## :raised_hands: Need Help?
+## Need Help?
 
 - [Twingate Documentation](https://docs.twingate.com/)
 - [Twingate Community (Reddit)](https://www.reddit.com/r/twingate/)
 - [Report an Issue](https://github.com/Twingate-Community/ubiquiti-gateway-connector/issues)
 
-## :page_facing_up: License
+## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
